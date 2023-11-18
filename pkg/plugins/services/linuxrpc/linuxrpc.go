@@ -120,17 +120,16 @@ func parseRPCInfo(response []byte, lookupResponse *plugins.ServiceRPC) error {
 	if len(response) < 0x20 {
 		return fmt.Errorf("invalid rpc length")
 	}
-
-	defer func() {
-		if r := recover(); r != nil {
-			// Ignore the missing data and the error
-		}
-	}()
-
+	
 	response = response[0x20:]
 	valueFollows := 1
 
 	for valueFollows == 1 {
+		if len(response) < 0x20 {
+			valueFollows = 0
+			break
+		}
+
 		tmp := plugins.RPCB{}
 
 		tmp.Program = int(binary.BigEndian.Uint32(response[0:4]))
