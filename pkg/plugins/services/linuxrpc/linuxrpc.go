@@ -121,12 +121,11 @@ func parseRPCInfo(response []byte, lookupResponse *plugins.ServiceRPC) error {
 		return fmt.Errorf("invalid rpc length")
 	}
 
-	// defer func() {
-	// 	if r := recover(); r != nil {
-	// 		// Handle the panic, print a message, log, or return an error.
-	// 		fmt.Println("Recovered from panic:", r)
-	// 	}
-	// }()
+	defer func() {
+		if r := recover(); r != nil {
+			// Ignore the missing data and the error
+		}
+	}()
 
 	response = response[0x20:]
 	valueFollows := 1
