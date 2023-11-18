@@ -21,8 +21,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/praetorian-inc/fingerprintx/pkg/plugins"
-	utils "github.com/praetorian-inc/fingerprintx/pkg/plugins/pluginutils"
+	"github.com/omarbdrn/fingerprintx/pkg/plugins"
+	utils "github.com/omarbdrn/fingerprintx/pkg/plugins/pluginutils"
 )
 
 /*
@@ -120,6 +120,14 @@ func parseRPCInfo(response []byte, lookupResponse *plugins.ServiceRPC) error {
 	if len(response) < 0x20 {
 		return fmt.Errorf("invalid rpc length")
 	}
+
+	// defer func() {
+	// 	if r := recover(); r != nil {
+	// 		// Handle the panic, print a message, log, or return an error.
+	// 		fmt.Println("Recovered from panic:", r)
+	// 	}
+	// }()
+
 	response = response[0x20:]
 	valueFollows := 1
 

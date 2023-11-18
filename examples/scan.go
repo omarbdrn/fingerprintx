@@ -6,8 +6,8 @@ import (
 	"net/netip"
 	"time"
 
-	"github.com/praetorian-inc/fingerprintx/pkg/plugins"
-	"github.com/praetorian-inc/fingerprintx/pkg/scan"
+	"github.com/omarbdrn/fingerprintx/pkg/plugins"
+	"github.com/omarbdrn/fingerprintx/pkg/scan"
 )
 
 func main() {
