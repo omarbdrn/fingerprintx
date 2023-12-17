@@ -50,7 +50,7 @@ func init() {
 	tlsConfig.MinVersion = tls.VersionTLS10
 }
 
-func setupPlugins() {
+func (c *Config) SetupPlugins() {
 	if len(sortedTCPPlugins) > 0 {
 		// already sorted
 		return
