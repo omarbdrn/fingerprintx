@@ -15,18 +15,18 @@
 package scan
 
 import (
-	"crypto/tls"
-	"fmt"
-	"log"
-	"net"
-	"sort"
-	"time"
+        "crypto/tls"
+        "fmt"
+        "log"
+        "net"
+        "sort"
+        "time"
 
-	"github.com/omarbdrn/fingerprintx/pkg/plugins"
+        "github.com/omarbdrn/fingerprintx/pkg/plugins"
 )
 
 var dialer = &net.Dialer{
-	Timeout: 2 * time.Second,
+        Timeout: 2 * time.Second,
 }
 
 var sortedTCPPlugins = make([]plugins.Plugin, 0)
@@ -34,41 +34,41 @@ var sortedTCPTLSPlugins = make([]plugins.Plugin, 0)
 var sortedUDPPlugins = make([]plugins.Plugin, 0)
 var tlsConfig = tls.Config{} //nolint:gosec
 
-func init() {
-	setupPlugins()
-	cipherSuites := make([]uint16, 0)
+func Init() {
+        setupPlugins()
+        cipherSuites := make([]uint16, 0)
 
-	for _, suite := range tls.CipherSuites() {
-		cipherSuites = append(cipherSuites, suite.ID)
-	}
+        for _, suite := range tls.CipherSuites() {
+                cipherSuites = append(cipherSuites, suite.ID)
+        }
 
-	for _, suite := range tls.InsecureCipherSuites() {
-		cipherSuites = append(cipherSuites, suite.ID)
-	}
-	tlsConfig.InsecureSkipVerify = true //nolint:gosec
-	tlsConfig.CipherSuites = cipherSuites
-	tlsConfig.MinVersion = tls.VersionTLS10
+        for _, suite := range tls.InsecureCipherSuites() {
+                cipherSuites = append(cipherSuites, suite.ID)
+        }
+        tlsConfig.InsecureSkipVerify = true //nolint:gosec
+        tlsConfig.CipherSuites = cipherSuites
+        tlsConfig.MinVersion = tls.VersionTLS10
 }
 
-func (c *Config) SetupPlugins() {
-	if len(sortedTCPPlugins) > 0 {
-		// already sorted
-		return
-	}
+func setupPlugins() {
+        if len(sortedTCPPlugins) > 0 {
+                // already sorted
+                return
+        }
 
-	sortedTCPPlugins = append(sortedTCPPlugins, plugins.Plugins[plugins.TCP]...)
-	sortedTCPTLSPlugins = append(sortedTCPTLSPlugins, plugins.Plugins[plugins.TCPTLS]...)
-	sortedUDPPlugins = append(sortedUDPPlugins, plugins.Plugins[plugins.UDP]...)
+        sortedTCPPlugins = append(sortedTCPPlugins, plugins.Plugins[plugins.TCP]...)
+        sortedTCPTLSPlugins = append(sortedTCPTLSPlugins, plugins.Plugins[plugins.TCPTLS]...)
+        sortedUDPPlugins = append(sortedUDPPlugins, plugins.Plugins[plugins.UDP]...)
 
-	sort.Slice(sortedTCPPlugins, func(i, j int) bool {
-		return sortedTCPPlugins[i].Priority() < sortedTCPPlugins[j].Priority()
-	})
-	sort.Slice(sortedUDPPlugins, func(i, j int) bool {
-		return sortedUDPPlugins[i].Priority() < sortedUDPPlugins[j].Priority()
-	})
-	sort.Slice(sortedTCPTLSPlugins, func(i, j int) bool {
-		return sortedTCPTLSPlugins[i].Priority() < sortedTCPTLSPlugins[j].Priority()
-	})
+        sort.Slice(sortedTCPPlugins, func(i, j int) bool {
+                return sortedTCPPlugins[i].Priority() < sortedTCPPlugins[j].Priority()
+        })
+        sort.Slice(sortedUDPPlugins, func(i, j int) bool {
+                return sortedUDPPlugins[i].Priority() < sortedUDPPlugins[j].Priority()
+        })
+        sort.Slice(sortedTCPTLSPlugins, func(i, j int) bool {
+                return sortedTCPTLSPlugins[i].Priority() < sortedTCPTLSPlugins[j].Priority()
+        })
 }
 
 // UDP Scan of the target
